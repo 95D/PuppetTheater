@@ -42,7 +42,7 @@ namespace Viento.PuppetTheater.Base
             }
             catch(CancelBehaviorException)
             {
-                // Nothing reaction because it is canceled.
+                // TODO: Handling according to cause. 
             }
         }
     }
