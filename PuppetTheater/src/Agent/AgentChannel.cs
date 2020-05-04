@@ -8,7 +8,9 @@ namespace Viento.PuppetTheater.Agent
     /// </summary>
     public class AgentChannel
     {
-        Dictionary<int, Agent> agentMap;
+        private readonly Dictionary<int, Agent> agentMap = new Dictionary<int, Agent>();
+
+        public AgentChannel() { }
 
         public void PutAgent(Agent agent)
         {
