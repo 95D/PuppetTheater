@@ -8,7 +8,7 @@ namespace Viento.PuppetTheater.Node
     public abstract class BehaviorNode : IBehaviorNode
     {
         private readonly string _behaviorId;
-        public virtual string behaviorId { get => _behaviorId ; }
+        public virtual string BehaviorId { get => _behaviorId ; }
         public BehaviorNode(string behaviorId)
         {
             this._behaviorId = behaviorId;
@@ -16,7 +16,7 @@ namespace Viento.PuppetTheater.Node
 
         public bool Execute(BehaviorContext context)
         {
-            context.OnExecuteStart(behaviorId);
+            context.OnExecuteStart(BehaviorId);
             bool result = OnExecute(context);
             context.OnExecuteEnd();
             return result;
@@ -26,7 +26,7 @@ namespace Viento.PuppetTheater.Node
 
         public override int GetHashCode()
         {
-            return behaviorId.GetHashCode();
+            return BehaviorId.GetHashCode();
         }
     }
 }

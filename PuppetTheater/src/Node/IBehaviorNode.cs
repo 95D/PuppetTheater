@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Viento.PuppetTheater.Base;
+﻿using Viento.PuppetTheater.Base;
 
-namespace Viento.PuppetTheater
+namespace Viento.PuppetTheater.Node
 {
     /// <summary>
     /// This interface is for the BehaviorNode class.
     /// </summary>
     public interface IBehaviorNode
     {
-        string behaviorId { get; }
+        string BehaviorId { get; }
         bool Execute(BehaviorContext context);
     }
 }
