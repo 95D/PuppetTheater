@@ -18,9 +18,10 @@ namespace Viento.PuppetTheater.API
     /// <param name="count"> The number to decide how many people to focus</param>
     /// <returns> Focused agent Id list </returns>
     public delegate ImmutableList<int> OnFocus(int count);
-    
+
     /// <summary>
-    /// TBD
+    /// <para>This interface is used as a bridge. </para>
+    /// <para>You can implement business logic (Condition, Focus filter, etc) used to perform BehaviorTree without changing PuppetTheater code. </para>
     /// </summary>    
     public interface BlackBoard
     {
