@@ -4,6 +4,9 @@ using System.Collections.Immutable;
 
 namespace Viento.PuppetTheater.Utiltiy
 {
+    /// <summary>
+    /// This class is used for making permutation collection.
+    /// </summary>
     public class RandomPermutation
     {
         private readonly Random random;
@@ -13,6 +16,14 @@ namespace Viento.PuppetTheater.Utiltiy
             this.random = random;
         }
 
+        /// <summary>
+        /// <para>Get Random permutated list.</para>
+        /// <para>List elements is minimum ~ (maximum - 1)</para>
+        /// <para>How do it: Choice random index and separate space without chosen index. and repeat process for two space.</para>
+        /// </summary>
+        /// <param name="minimum">start</param>
+        /// <param name="maximum">end + 1</param>
+        /// <returns></returns>
         public virtual ImmutableList<int> Next(int minimum, int maximum)
         {
             List<int> list = new List<int>();
