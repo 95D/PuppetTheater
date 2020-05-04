@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BehaviorTree.Serialization.Action
+﻿namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
     /// This class data entity class for TriggerNode.
