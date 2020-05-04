@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Viento.PuppetTheater.Base;
-using Viento.PuppetTheater.Utiltiy;
+using Viento.PuppetTheater.Utility;
 
 namespace Viento.PuppetTheater.Node
 {

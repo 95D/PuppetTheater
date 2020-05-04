@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Viento.PuppetTheater.Utiltiy
+namespace Viento.PuppetTheater.Utility
 {
     /// <summary>
     /// This class is used for making permutation collection.
