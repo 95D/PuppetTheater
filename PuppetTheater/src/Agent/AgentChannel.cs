@@ -27,10 +27,15 @@ namespace Viento.PuppetTheater.Agent
         }
 
         public bool HasAction(string agentId)
-
-        public AgentAction Subscribe(string agentId)
         {
+            return agentMap[agentId.GetHashCode()].actionQueue.Count == 0;
+        }
 
+        public AgentAction SubscribeAction(string agentId)
+        {
+            return HasAction(agentId)
+                ? agentMap[agentId.GetHashCode()].actionQueue.Dequeue()
+                : null;
         }
     }
 }

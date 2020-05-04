@@ -2,6 +2,9 @@
 
 namespace Viento.PuppetTheater.Agent
 {
+    /// <summary>
+    /// <para> This class is delivered to subscriber which processes agent's action. </para>
+    /// </summary>
     public class AgentAction
     {
         public readonly ImmutableList<int> targets;
