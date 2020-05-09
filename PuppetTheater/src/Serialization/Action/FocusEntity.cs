@@ -1,9 +1,11 @@
-﻿namespace Viento.PuppetTheater.Serialization
+﻿using Viento.PuppetTheater.Utility;
+
+namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
     /// This class data entity class for FocusNode.
     /// </summary>
-    public class FocusEntity
+    public class FocusEntity : DataClass<FocusEntity>
     {
         public readonly string name;
         public readonly string filterId;

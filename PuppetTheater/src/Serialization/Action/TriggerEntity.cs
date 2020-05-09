@@ -1,9 +1,11 @@
-﻿namespace Viento.PuppetTheater.Serialization
+﻿using Viento.PuppetTheater.Utility;
+
+namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
     /// This class data entity class for TriggerNode.
     /// </summary>
-    public class TriggerEntity
+    public class TriggerEntity : DataClass<TriggerEntity>
     {
         public readonly string name;
         public readonly string eventId;
