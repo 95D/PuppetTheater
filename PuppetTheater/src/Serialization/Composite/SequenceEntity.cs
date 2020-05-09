@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Viento.PuppetTheater.Utility;
 
 namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
     /// This class data entity class for SeqenceNode.
     /// </summary>
-    public class SequenceEntity
+    public class SequenceEntity : DataClass<SequenceEntity>
     {
         public readonly string name;
         public readonly List<string> children;
