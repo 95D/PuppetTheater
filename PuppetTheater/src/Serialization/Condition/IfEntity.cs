@@ -1,9 +1,11 @@
-﻿namespace Viento.PuppetTheater.Serialization
+﻿using Viento.PuppetTheater.Utility;
+
+namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
     /// This class data entity class for IfNode
     /// </summary>
-    public class IfEntity
+    public class IfEntity : DataClass<IfEntity>
     {
         public readonly string name;
         public readonly string conditionFuncName;

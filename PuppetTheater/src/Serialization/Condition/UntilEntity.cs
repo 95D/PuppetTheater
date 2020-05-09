@@ -1,9 +1,11 @@
-﻿namespace Viento.PuppetTheater.Serialization
+﻿using Viento.PuppetTheater.Utility;
+
+namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
     /// This class data entity class for UntilNode.
     /// </summary>
-    public class UntilEntity
+    public class UntilEntity : DataClass<UntilEntity>
     {
         public readonly string name;
         public readonly string conditionFuncName;
