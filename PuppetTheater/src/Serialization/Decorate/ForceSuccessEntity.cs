@@ -1,9 +1,11 @@
-﻿namespace Viento.PuppetTheater.Serialization
+﻿using Viento.PuppetTheater.Utility;
+
+namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
     /// This class data entity class for ForceSuccessNode.
     /// </summary>
-    public class ForceSuccessEntity
+    public class ForceSuccessEntity : DataClass<ForceSuccessEntity>
     {
         public readonly string name;
         public readonly string child;

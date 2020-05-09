@@ -1,9 +1,11 @@
-﻿namespace Viento.PuppetTheater.Serialization
+﻿using Viento.PuppetTheater.Utility;
+
+namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
     /// This class data entity class for StochasticNode.
     /// </summary>
-    public class StochasticEntity
+    public class StochasticEntity : DataClass<StochasticEntity>
     {
         public readonly string name;
         public readonly float threshold;

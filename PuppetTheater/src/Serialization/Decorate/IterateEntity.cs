@@ -1,9 +1,11 @@
-﻿namespace Viento.PuppetTheater.Serialization
+﻿using Viento.PuppetTheater.Utility;
+
+namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
     /// This class data entity class for IterateNode.
     /// </summary>
-    public class IterateEntity
+    public class IterateEntity : DataClass<IterateEntity>
     {
         public readonly string name;
         public readonly int range;
