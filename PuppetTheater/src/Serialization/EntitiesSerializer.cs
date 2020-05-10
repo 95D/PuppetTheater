@@ -32,7 +32,7 @@ namespace Viento.PuppetTheater.Serialization
 
         public static EntitiesSerializer Deserialize(string json)
         {
-            return JsonConvert.DeserializeObject(json) as EntitiesSerializer;
+            return JsonConvert.DeserializeObject<EntitiesSerializer>(json);
         }
 
         public Dictionary<int, IBehaviorNode> BuildBranchMap(BlackBoard blackBoard)
@@ -41,7 +41,6 @@ namespace Viento.PuppetTheater.Serialization
             var branches = new Dictionary<int, IBehaviorNode>();
             var symbolTable = CreateSymbolTable();
 
-            int total = 0;
             while (symbolTable.entityMap.Keys.Count > 0)
             {
                 Console.WriteLine("Loop: " + symbolTable.entityMap.Keys.Count);
@@ -191,7 +190,7 @@ namespace Viento.PuppetTheater.Serialization
                 symbolTable.AddEntity(
                           key: entity.name.GetHashCode(),
                           entity: entity,
-                          children: new List<int>() { 
+                          children: new List<int>() {
                               entity.thenChild.GetHashCode(), entity.elseChild.GetHashCode()
                           });
             }
@@ -249,6 +248,43 @@ namespace Viento.PuppetTheater.Serialization
             return symbolTable;
         }
 
+        public bool EqualsData(EntitiesSerializer obj)
+        {
+            var _serializer = obj as EntitiesSerializer;
+            if (!Enumerable.SequenceEqual(actionList, _serializer.actionList))
+                return false;
+            if (!Enumerable.SequenceEqual(focusList, _serializer.focusList))
+                return false;
+            if (!Enumerable.SequenceEqual(triggerList, _serializer.triggerList))
+                return false;
+
+            if (!Enumerable.SequenceEqual(randomSelectList, _serializer.randomSelectList))
+                return false;
+            if (!Enumerable.SequenceEqual(selectList, _serializer.selectList))
+                return false;
+            if (!Enumerable.SequenceEqual(sequenceList, _serializer.sequenceList))
+                return false;
+
+            if (!Enumerable.SequenceEqual(ifElseList, _serializer.ifElseList))
+                return false;
+            if (!Enumerable.SequenceEqual(ifList, _serializer.ifList))
+                return false;
+            if (!Enumerable.SequenceEqual(untilList, _serializer.untilList))
+                return false;
+
+            if (!Enumerable.SequenceEqual(forceFailureList, _serializer.forceFailureList))
+                return false;
+            if (!Enumerable.SequenceEqual(forceSuccessList, _serializer.forceSuccessList))
+                return false;
+            if (!Enumerable.SequenceEqual(invertList, _serializer.invertList))
+                return false;
+            if (!Enumerable.SequenceEqual(iterateList, _serializer.iterateList))
+                return false;
+            if (!Enumerable.SequenceEqual(stochasticList, _serializer.stochasticList))
+                return false;
+            return true;
+        }
+
         protected class SymbolTable
         {
             public readonly Dictionary<int, object> entityMap = new Dictionary<int, object>();
@@ -273,9 +309,9 @@ namespace Viento.PuppetTheater.Serialization
                 prerequisiteMap[key] = children.Count;
                 if (!entryOrderMap.ContainsKey(key))
                     entryOrderMap[key] = new List<int>();
-                foreach(int child in children)
+                foreach (int child in children)
                 {
-                    if(!entryOrderMap.ContainsKey(child))
+                    if (!entryOrderMap.ContainsKey(child))
                     {
                         entryOrderMap[child] = new List<int>();
                     }
