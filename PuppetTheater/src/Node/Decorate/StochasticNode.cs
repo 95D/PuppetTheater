@@ -1,33 +1,50 @@
 ﻿using System;
-using Viento.PuppetTheater.Base;
+using Viento.PuppetTheater.Puppet;
 
 namespace Viento.PuppetTheater.Node
 {
     /// <summary>
-    /// This class is BehaviorNode for processing child according to stochastic activation.
+    /// A [DecorateNode] for processing `child node` if random threshold is activated
     /// </summary>
-    public class StochasticNode : BehaviorNode
+    public sealed class StochasticNode : DecorateNode
     {
         public readonly float threshold;
-        public readonly IBehaviorNode child;
 
         public StochasticNode(
             string name,
-            IBehaviorNode child,
+            BehaviorNode child,
             float threshold
-            ) : base(name)
+            ) : base(name, child)
         {
-            this.child = child;
             this.threshold = threshold;
         }
 
-        protected override bool OnExecute(BehaviorContext context)
+        private TraversalState InvokeByThreshold(TraversalState traversalState, bool isSucceeded)
         {
             var randGen = new Random();
             if (randGen.NextDouble() > threshold)
-                return child.Execute(context);
+            {
+                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Running)
+                    .PushNode(child.CreateNodeStateAsReady());
+            }
+            else if (isSucceeded)
+                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Success);
             else
-                return false;
+                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Failed);
         }
+
+        public override TraversalState TraverseDown(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            long currentMillis) => InvokeByThreshold(traversalState, false);
+
+        public override TraversalState TraverseUp(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            NodeState childNodeState) => InvokeByThreshold(
+                traversalState,
+                childNodeState.lifeCycle.isSucceeded());
     }
 }

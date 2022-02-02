@@ -1,12 +1,11 @@
-﻿using Viento.PuppetTheater.Base;
-
-namespace Viento.PuppetTheater.Node
+﻿namespace Viento.PuppetTheater.Node
 {
     /// <summary>
     /// This class is BehaviorNode for processing child with 'range' times.
     /// </summary>
-    public class IterateNode : BehaviorNode
+    public class IterateNode //: BehaviorNode
     {
+        /*
         public readonly int range;
         public readonly IBehaviorNode child;
 
@@ -20,7 +19,7 @@ namespace Viento.PuppetTheater.Node
             this.range = range;
         }
 
-        protected override bool OnExecute(BehaviorContext context)
+        protected override bool ExecuteInternal(string puppetId, TraversalState traversalState, long currentMillis)
         {
             for(int i = 0; i < range; i++)
             {
@@ -28,5 +27,6 @@ namespace Viento.PuppetTheater.Node
             }
             return true;
         }
+        */
     }
 }

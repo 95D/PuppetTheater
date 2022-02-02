@@ -1,25 +1,40 @@
-﻿using Viento.PuppetTheater.Base;
+﻿using Viento.PuppetTheater.Puppet;
 
 namespace Viento.PuppetTheater.Node
 {
     /// <summary>
-    /// This class is BehaviorNode for processing child and do invert return value
+    /// A [DecorateNode] for returning inverted result to parent
     /// </summary>
-    public class InvertNode : BehaviorNode
+    public sealed class InvertNode : DecorateNode
     {
-        public readonly IBehaviorNode child;
-
         public InvertNode(
-            string name,
-            IBehaviorNode child
-            ) : base(name)
+            string nodeId,
+            BehaviorNode child
+            ) : base(nodeId, child)
         {
-            this.child = child;
         }
 
-        protected override bool OnExecute(BehaviorContext context)
+        public override TraversalState TraverseDown(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            long currentMillis) => traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Running)
+                .PushNode(child.CreateNodeStateAsReady());
+
+        public override TraversalState TraverseUp(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            NodeState childNodeState)
         {
-            return !child.Execute(context);
+            if (childNodeState.lifeCycle.isSucceeded())
+            {
+                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Failed);
+            }
+            else
+            {
+                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Success);
+            }
         }
     }
 }

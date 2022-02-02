@@ -1,26 +1,30 @@
-﻿using Viento.PuppetTheater.Base;
+﻿using Viento.PuppetTheater.Puppet;
 
 namespace Viento.PuppetTheater.Node
 {
     /// <summary>
-    /// This class is BehaviorNode for processing child and always return true.
+    /// A [DecorateNode] for returning result as `Success` to parent
     /// </summary>
-    public class ForceSuccessNode : BehaviorNode
+    public sealed class ForceSuccessNode : DecorateNode
     {
-        public readonly IBehaviorNode child;
-
         public ForceSuccessNode(
-            string name,
-            IBehaviorNode child
-            ) : base(name)
+            string nodeId,
+            BehaviorNode child
+            ) : base(nodeId, child)
         {
-            this.child = child;
         }
 
-        protected override bool OnExecute(BehaviorContext context)
-        {
-            child.Execute(context);
-            return true;
-        }
+        public override TraversalState TraverseDown(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            long currentMillis) => traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Success)
+                .PushNode(child.CreateNodeStateAsReady());
+
+        public override TraversalState TraverseUp(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            NodeState childNodeState) => traversalState;
     }
 }
