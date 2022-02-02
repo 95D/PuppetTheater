@@ -1,4 +1,4 @@
-﻿using Viento.PuppetTheater.Base;
+﻿using Viento.PuppetTheater.Node;
 
 namespace Viento.PuppetTheater.Exception
 {
@@ -15,10 +15,18 @@ namespace Viento.PuppetTheater.Exception
         }
 
         public CancelBehaviorException(
-            BehaviorContext context,
+            string puppetId,
+            TraversalState traversalState,
             Cause cause
-            ) : base("Behavior tree is cancelled. CAUSE:[" + cause.ToString() + "].\n" +
-                context.GetStackTrace())
-        { }
+            ) : base(GetExceptionMessage(puppetId, traversalState, cause))
+        {}
+
+        private static string GetExceptionMessage(
+                string puppetId,
+                TraversalState traversalState,
+                Cause cause
+            ) => string.Format(
+                    "{0}'s Behavior tree is cancelled. CAUSE:[{1}].\n{2}", 
+                    puppetId, cause.ToString(), traversalState.GetStackTrace());
     }
 }
