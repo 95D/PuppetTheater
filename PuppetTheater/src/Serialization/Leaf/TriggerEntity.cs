@@ -3,17 +3,19 @@
 namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
-    /// This class data entity class for ActionNode.
+    /// This class data entity class for TriggerNode.
     /// </summary>
-    public class ActionEntity : DataClass<ActionEntity>
+    public class TriggerEntity : DataClass<TriggerEntity>
     {
         public readonly string name;
         public readonly string eventId;
+        public readonly string agentId;
 
-        public ActionEntity(string name, string eventId)
+        public TriggerEntity(string name, string eventId, string agentId)
         {
             this.name = name;
             this.eventId = eventId;
+            this.agentId = agentId;
         }
     }
 }

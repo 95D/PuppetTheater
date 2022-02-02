@@ -12,12 +12,7 @@ namespace Viento.PuppetTheater.Serialization
         public readonly string priorityId;
         public readonly int count = 1;
 
-        public FocusEntity(
-            string name,
-            string filterId,
-            string priorityId,
-            int count
-            )
+        public FocusEntity(string name, string filterId, string priorityId, int count)
         {
             this.name = name;
             this.filterId = filterId;
