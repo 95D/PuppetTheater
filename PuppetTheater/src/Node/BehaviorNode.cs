@@ -1,32 +1,55 @@
-﻿using Viento.PuppetTheater.Base;
-
+﻿using Viento.PuppetTheater.Puppet;
 namespace Viento.PuppetTheater.Node
 {
     /// <summary>
-    /// This class is a unit of the Behavior tree.
+    /// A Model class for constructing `Node` in `Behavior tree`
+    /// - This node is stateless model class, State is holded in [NodeState]
     /// </summary>
-    public abstract class BehaviorNode : IBehaviorNode
+    public abstract class BehaviorNode
     {
-        private readonly string _behaviorId;
-        public virtual string BehaviorId { get => _behaviorId ; }
-        public BehaviorNode(string behaviorId)
+        public readonly string nodeId;
+
+        public BehaviorNode(string nodeId)
         {
-            this._behaviorId = behaviorId;
+            this.nodeId = nodeId;
         }
 
-        public bool Execute(BehaviorContext context)
+        public virtual NodeState CreateNodeStateAsReady() =>
+            new BasicNodeState(nodeId, NodeLifeCycle.Ready);
+
+        public abstract TraversalState TraverseUp(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            NodeState childNodeState
+        );
+        
+        public abstract TraversalState TraverseDown(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            long currentMillis
+        );
+
+        public TraversalState Execute(
+            string puppetId, 
+            IPuppetController puppetController, 
+            TraversalState traversalState, 
+            long currentMillis)
         {
-            context.OnExecuteStart(BehaviorId);
-            bool result = OnExecute(context);
-            context.OnExecuteEnd();
-            return result;
+            var currentStep = ExecuteInternal(puppetId, puppetController, traversalState, currentMillis);
+            return traversalState.UpdateCurrentNodeLifeCycle(currentStep);        
         }
 
-        protected abstract bool OnExecute(BehaviorContext context);
+        protected abstract NodeLifeCycle ExecuteInternal(
+            string puppetId, 
+            IPuppetController puppetController,
+            TraversalState traversalState, 
+            long currentMillis);
 
         public override int GetHashCode()
         {
-            return BehaviorId.GetHashCode();
+            return nodeId.GetHashCode();
         }
     }
 }
