@@ -1,34 +1,35 @@
-﻿using Viento.PuppetTheater.API;
-using Viento.PuppetTheater.Base;
+﻿using Viento.PuppetTheater.Puppet;
 
 namespace Viento.PuppetTheater.Node
 {
     /// <summary>
-    /// This class is BehaviorNode for processing child then or else according to condition.
+    /// A [ConditionBaseNode] for branching `true -> then` and `false -> else`
     /// </summary>
-    public class IfElseNode : ConditionBaseNode
+    public sealed class IfElseNode : ConditionNode
     {
-        public readonly IBehaviorNode thenChild;
-        public readonly IBehaviorNode elseChild;
+        public readonly BehaviorNode thenChild;
+        public readonly BehaviorNode elseChild;
 
         public IfElseNode(
             string name,
-            OnCheckCondition onCheckCondition,
-            IBehaviorNode thenChild, 
-            IBehaviorNode elseChild
-            ) : base(name, onCheckCondition)
+            string assertionId,
+            BehaviorNode thenChild,
+            BehaviorNode elseChild) : base(name, assertionId)
         {
             this.thenChild = thenChild;
             this.elseChild = elseChild;
         }
 
-        protected override bool OnExecute(BehaviorContext context)
+        public override TraversalState TraverseDown(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            long currentMillis)
         {
-            if (inference(context))
-                return thenChild.Execute(context);
+            if (puppetController.Assert(puppetId, assertionId))
+                return traversalState.PopNode().PushNode(thenChild.CreateNodeStateAsReady());
             else
-                return elseChild.Execute(context);
-
+                return traversalState.PopNode().PushNode(elseChild.CreateNodeStateAsReady());
         }
     }
 }

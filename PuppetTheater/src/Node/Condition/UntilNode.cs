@@ -1,33 +1,47 @@
-﻿using Viento.PuppetTheater.API;
-using Viento.PuppetTheater.Base;
+﻿using Viento.PuppetTheater.Puppet;
 
 namespace Viento.PuppetTheater.Node
 {
     /// <summary>
-    /// This class is BehaviorNode for processing child until condition is false.
+    /// A [ConditionBaseNode] for iterating `until` until assertion becomes false
     /// </summary>
-    public class UntilNode : ConditionBaseNode
+    public sealed class UntilNode : ConditionNode
     {
-        public readonly IBehaviorNode untilChild;
+        public readonly BehaviorNode untilChild;
 
         public UntilNode(
             string name,
-            OnCheckCondition onCheckCondition,
-            IBehaviorNode thenChild
-            ) : base(name, onCheckCondition)
+            string assertionId,
+            BehaviorNode thenChild
+            ) : base(name, assertionId)
         {
             this.untilChild = thenChild;
         }
 
-        protected override bool OnExecute(BehaviorContext context)
+        public override TraversalState TraverseDown(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            long currentMillis)
         {
-            bool isSuccess = false;
-            while(inference(context))
-            {
-                untilChild.Execute(context);
-                isSuccess = true;
-            }
-            return isSuccess;
+            if (puppetController.Assert(puppetId, assertionId))
+                return traversalState.PopNode().PushNode(untilChild.CreateNodeStateAsReady());
+            else
+                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Failed);
+        }
+
+        public override TraversalState TraverseUp(
+            string puppetId,
+            IPuppetController puppetController,
+            TraversalState traversalState,
+            NodeState childNodeState)
+        {
+            if (puppetController.Assert(puppetId, assertionId))
+                return traversalState.PopNode().PushNode(untilChild.CreateNodeStateAsReady());
+            else if (childNodeState.lifeCycle.isSucceeded())
+                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Success);
+            else
+                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Failed);
         }
     }
 }
