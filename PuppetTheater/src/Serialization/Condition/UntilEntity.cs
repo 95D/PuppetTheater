@@ -8,17 +8,17 @@ namespace Viento.PuppetTheater.Serialization
     public class UntilEntity : DataClass<UntilEntity>
     {
         public readonly string name;
-        public readonly string conditionFuncName;
+        public readonly string assertionId;
         public readonly string thenChild;
 
         public UntilEntity(
             string name,
-            string conditionFuncName,
+            string assertionId,
             string thenChild
             )
         {
             this.name = name;
-            this.conditionFuncName = conditionFuncName;
+            this.assertionId = assertionId;
             this.thenChild = thenChild;
         }
     }

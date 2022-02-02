@@ -8,19 +8,19 @@ namespace Viento.PuppetTheater.Serialization
     public class IfElseEntity : DataClass<IfElseEntity>
     {
         public readonly string name;
-        public readonly string conditionFuncName;
+        public readonly string assertionId;
         public readonly string thenChild;
         public readonly string elseChild;
 
         public IfElseEntity(
             string name,
-            string conditionFuncName,
+            string assertionId,
             string thenChild,
             string elseChild
             )
         {
             this.name = name;
-            this.conditionFuncName = conditionFuncName;
+            this.assertionId = assertionId;
             this.thenChild = thenChild;
             this.elseChild = elseChild;
         }
