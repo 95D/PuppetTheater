@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Viento.PuppetTheater.Serialization
 {
+    /// <summary>
+    /// A logic for mapping [INodeEntity] to [BehaviorNode]
+    /// </summary>
     public static class EntityToNodeConvertExtensions
     {
         private static BehaviorNode InsertToTree(

@@ -1,4 +1,7 @@
 namespace Viento.PuppetTheater.Serialization {
+    /// <summary>
+    /// A Creator for creating [INodeEntity] according to key [nodeType]
+    /// </summary>
     public class NodeEntityCreator {
         public INodeEntity Create(string nodeType) {
             switch(nodeType) {

@@ -5,6 +5,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Viento.PuppetTheater.Serialization
 {
+    /// <summary>
+    /// A [CustomCreationConverter] to convert [JsonObject] into [INodeEntity]
+    /// </summary>
     public class NodeEntityConverter : CustomCreationConverter<INodeEntity>
     {
         private readonly NodeEntityCreator nodeEntityCreator = new NodeEntityCreator();
