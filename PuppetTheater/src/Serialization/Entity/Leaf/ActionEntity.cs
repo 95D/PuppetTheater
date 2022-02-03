@@ -1,7 +1,7 @@
 ﻿namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
-    /// This class data entity class for ActionNode.
+    /// This class data entity class for [ActionNode]
     /// </summary>
     public class ActionEntity : INodeEntity
     {

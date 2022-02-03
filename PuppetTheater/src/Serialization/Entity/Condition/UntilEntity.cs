@@ -1,7 +1,7 @@
 ﻿namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
-    /// This class data entity class for UntilNode.
+    /// This class data entity class for [UntilNode]
     /// </summary>
     public class UntilEntity : INodeEntity
     {

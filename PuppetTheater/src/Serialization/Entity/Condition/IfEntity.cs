@@ -1,7 +1,7 @@
 ﻿namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
-    /// This class data entity class for IfNode
+    /// This class data entity class for [IfNode]
     /// </summary>
     public class IfEntity : INodeEntity
     {

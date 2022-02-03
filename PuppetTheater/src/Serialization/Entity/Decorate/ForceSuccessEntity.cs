@@ -1,7 +1,7 @@
 ﻿namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
-    /// This class data entity class for ForceSuccessNode.
+    /// This class data entity class for [ForceSuccessNode]
     /// </summary>
     public class ForceSuccessEntity : INodeEntity
     {

@@ -1,7 +1,7 @@
 ﻿namespace Viento.PuppetTheater.Serialization
 {
     /// <summary>
-    /// This class data entity class for StochasticNode.
+    /// This class data entity class for [StochasticNode]
     /// </summary>
     public class StochasticEntity : INodeEntity
     {

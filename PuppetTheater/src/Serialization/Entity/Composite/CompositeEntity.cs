@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 namespace Viento.PuppetTheater.Serialization
 {
+    /// <summary>
+    /// This class data entity class for [CompositeNode]
+    /// </summary>
     public class CompositeEntity : INodeEntity
     {
         public const string TYPE = "composite";
