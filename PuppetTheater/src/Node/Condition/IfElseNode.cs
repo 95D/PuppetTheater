@@ -11,10 +11,10 @@ namespace Viento.PuppetTheater.Node
         public readonly BehaviorNode elseChild;
 
         public IfElseNode(
-            string name,
+            string nodeId,
             string assertionId,
             BehaviorNode thenChild,
-            BehaviorNode elseChild) : base(name, assertionId)
+            BehaviorNode elseChild) : base(nodeId, assertionId)
         {
             this.thenChild = thenChild;
             this.elseChild = elseChild;

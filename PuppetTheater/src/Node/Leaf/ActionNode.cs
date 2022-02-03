@@ -10,9 +10,9 @@ namespace Viento.PuppetTheater.Node
         private readonly string actionId;
         private readonly long timeoutDurationMillis;
         public ActionNode(
-            string name,
+            string nodeId,
             string actionId,
-            long timeoutDurationMillis) : base(name)
+            long timeoutDurationMillis) : base(nodeId)
         {
             this.actionId = actionId;
             this.timeoutDurationMillis = timeoutDurationMillis;

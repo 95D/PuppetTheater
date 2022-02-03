@@ -10,10 +10,10 @@ namespace Viento.PuppetTheater.Node
         public readonly BehaviorNode untilChild;
 
         public UntilNode(
-            string name,
+            string nodeId,
             string assertionId,
             BehaviorNode thenChild
-            ) : base(name, assertionId)
+            ) : base(nodeId, assertionId)
         {
             this.untilChild = thenChild;
         }

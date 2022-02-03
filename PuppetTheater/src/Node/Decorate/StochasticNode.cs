@@ -11,10 +11,10 @@ namespace Viento.PuppetTheater.Node
         public readonly float threshold;
 
         public StochasticNode(
-            string name,
+            string nodeId,
             BehaviorNode child,
             float threshold
-            ) : base(name, child)
+            ) : base(nodeId, child)
         {
             this.threshold = threshold;
         }
