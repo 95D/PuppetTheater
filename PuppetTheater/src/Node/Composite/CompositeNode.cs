@@ -6,7 +6,7 @@ namespace Viento.PuppetTheater.Node
     /// <summary>
     /// A [BehaviorNode] which has children nodes
     /// </summary>
-    public abstract class CompositeNode : BehaviorNode
+    public class CompositeNode : BehaviorNode
     {
         public readonly PermutateCategory permutateType;
         public readonly CompositeCategory category;
