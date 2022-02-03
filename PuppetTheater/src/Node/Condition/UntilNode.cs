@@ -25,7 +25,9 @@ namespace Viento.PuppetTheater.Node
             long currentMillis)
         {
             if (puppetController.Assert(puppetId, assertionId))
-                return traversalState.PopNode().PushNode(untilChild.CreateNodeStateAsReady());
+                return traversalState
+                    .UpdateCurrentNodeLifeCycle(NodeLifeCycle.Running)
+                    .PushNode(untilChild.CreateNodeStateAsReady());
             else
                 return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Failed);
         }
@@ -37,11 +39,9 @@ namespace Viento.PuppetTheater.Node
             NodeState childNodeState)
         {
             if (puppetController.Assert(puppetId, assertionId))
-                return traversalState.PopNode().PushNode(untilChild.CreateNodeStateAsReady());
-            else if (childNodeState.lifeCycle.isSucceeded())
-                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Success);
+                return traversalState.PushNode(untilChild.CreateNodeStateAsReady());
             else
-                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Failed);
+                return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Success);
         }
     }
 }
