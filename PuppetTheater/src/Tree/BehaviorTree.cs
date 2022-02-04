@@ -18,7 +18,5 @@ namespace Viento.PuppetTheater.Tree
         public BehaviorNode GetBehaviorNode(string nodeId) => nodeDictionary[nodeId];
         public BehaviorNode GetCurrentNode(TraversalState state) =>
             nodeDictionary[state.currentNodeState.nodeId];
-        public BehaviorNode GetParentNode(TraversalState state) =>
-            nodeDictionary[state.PopNode().currentNodeState.nodeId];
     }
 }

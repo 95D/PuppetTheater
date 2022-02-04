@@ -9,11 +9,12 @@ namespace Viento.PuppetTheater.Puppet
     public sealed class Puppet
     {
         private readonly BehaviorTree behaviorTree;
-        private TraversalState traversalState;
-        private readonly string puppetId;
+        public TraversalState traversalState { get; private set; }
+        public readonly string puppetId;
 
-        public Puppet(string puppetId, string rootId)
+        public Puppet(BehaviorTree tree, string puppetId, string rootId)
         {
+            this.behaviorTree = tree;
             this.puppetId = puppetId;
             traversalState = new TraversalState(behaviorTree.GetBehaviorNode(rootId).CreateNodeStateAsReady());
         }
@@ -54,12 +55,13 @@ namespace Viento.PuppetTheater.Puppet
             }
             else if (currentNodeState.lifeCycle.isFinished())
             {
-                return behaviorTree.GetParentNode(traversalState).TraverseUp(
+                var childNodeState = traversalState.currentNodeState;
+                var parentTraversalState = traversalState.PopNode();
+                return behaviorTree.GetCurrentNode(parentTraversalState).TraverseUp(
                     puppetId,
                     puppetController,
-                    traversalState,
-                    currentNodeState);
-
+                    parentTraversalState,
+                    childNodeState);
             }
             else
             {
