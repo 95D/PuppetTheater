@@ -1,0 +1,28 @@
+{
+    "type": "composite",
+    "nodeId": "1",
+    "permutate": "Ascending",
+    "category": "sequence",
+    "children": [
+        {
+            "type": "action",
+            "nodeId": "2",
+            "actionId": "sit-up"
+        },
+        {
+            "type": "if",
+            "nodeId": "3",
+            "assertionId": "could-buy-item",
+            "thenChild": {
+                "type": "action",
+                "nodeId": "4",
+                "actionId": "buy-item"
+            }
+        },
+        {
+            "type": "action",
+            "nodeId":  "5",
+            "actionId": "sit-down"
+        }
+    ]
+}
