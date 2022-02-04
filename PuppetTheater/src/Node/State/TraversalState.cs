@@ -8,40 +8,65 @@ namespace Viento.PuppetTheater.Node
     /// </summary>
     public struct TraversalState
     {
+        private readonly NodeState topNode;
         private readonly ImmutableList<NodeState> nodeStack;
 
-        public NodeState currentNodeState { get => nodeStack.Last(); }
+        public NodeState currentNodeState { 
+            get {
+                return nodeStack.Last();
+            }
+        }
 
         public TraversalState(NodeState topNode)
         {
+            this.topNode = topNode;
             nodeStack = ImmutableList<NodeState>.Empty.Add(topNode);
         }
 
-        private TraversalState(ImmutableList<NodeState> nodeStack)
+        private TraversalState(NodeState topNode, ImmutableList<NodeState> nodeStack)
         {
+            this.topNode = topNode;
             this.nodeStack = nodeStack;
         }
 
-        public TraversalState PushNode(NodeState state) => new TraversalState(state);
+        public TraversalState PushNode(NodeState state) => new TraversalState(
+            topNode,
+            nodeStack.Add(state));
 
         public TraversalState UpdateCurrentNodeLifeCycle(NodeLifeCycle next) =>
             new TraversalState(
+                topNode,
                 nodeStack.Replace(
                     currentNodeState,
                     currentNodeState.UpdateCurrentLifeCycle(next)));
 
         public TraversalState UpdateCurrentNode(NodeState next) =>
             new TraversalState(
+                topNode,
                 nodeStack.Replace(currentNodeState, next));
 
-        public TraversalState PopNode() => new TraversalState(nodeStack.Remove(currentNodeState));
+        public TraversalState PopNode() {
+            var nextNodeStack = nodeStack.Remove(currentNodeState);
+            if(nextNodeStack.IsEmpty) {
+                return Reset();
+            } else {
+                return new TraversalState(
+                    topNode,
+                    nextNodeStack);
+            }
+        }
 
         public TraversalState Reset() => new TraversalState(
-            ImmutableList<NodeState>.Empty.Add(nodeStack[0]));
+            topNode,
+            ImmutableList<NodeState>.Empty.Add(topNode));
 
         public string GetStackTrace() => string.Join(
             separator: " => ",
             values: nodeStack.Select(it =>
-            string.Format("[{0}, <{1}>]", it.nodeId, it.lifeCycle.ToString())));
+            string.Format(
+                "[{0}|{1}, <{2}>]", 
+                it.nodeId, 
+                it.GetType().Name, 
+                it.lifeCycle.ToString())));
     }
 }
