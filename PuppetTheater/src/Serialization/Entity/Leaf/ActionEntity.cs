@@ -7,7 +7,7 @@
     {
         public const string TYPE = "action";
         public string actionId;
-        public long timeoutDurationMillis;
+        public long timeoutDurationMillis = long.MaxValue;
         public string nodeId { get; set; }
         public string type { get; set; }
     }
