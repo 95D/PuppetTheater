@@ -62,11 +62,11 @@ namespace Viento.PuppetTheater.Node
 
         public string GetStackTrace() => string.Join(
             separator: " => ",
-            values: nodeStack.Select(it =>
-            string.Format(
-                "[{0}|{1}, <{2}>]", 
-                it.nodeId, 
-                it.GetType().Name, 
-                it.lifeCycle.ToString())));
+            values: nodeStack.Select(x =>
+                string.Format(
+                    "[{0}|{1}, <{2}>]", 
+                    x.nodeId, 
+                    x.GetType().Name, 
+                    x.lifeCycle.ToString())));
     }
 }
