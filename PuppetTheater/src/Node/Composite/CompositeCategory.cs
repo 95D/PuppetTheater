@@ -7,7 +7,7 @@ namespace Viento.PuppetTheater.Node
     {
         public readonly NodeLifeCycle finallyState;
         public readonly NodeLifeCycle breakState;
-        private CompositeCategory(NodeLifeCycle finallyState, NodeLifeCycle breakState)
+        public CompositeCategory(NodeLifeCycle finallyState, NodeLifeCycle breakState)
         {
             this.finallyState = finallyState;
             this.breakState = breakState;
