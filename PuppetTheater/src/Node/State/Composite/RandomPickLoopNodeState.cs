@@ -10,8 +10,8 @@ namespace Viento.PuppetTheater.Node
     {
         public readonly int size;
 
-        private readonly int _index;
-        public override int index { get; }
+        private readonly int index;
+        public override int GetIndex() => index;
 
         private readonly Random random = new Random();
 

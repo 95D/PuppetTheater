@@ -10,7 +10,7 @@ namespace Viento.PuppetTheater.Node
         {
         }
 
-        public abstract int index { get; }
+        public abstract int GetIndex();
         public abstract bool isIterationFinished();
         public abstract CompositeNodeState ToNextIndex();
     }

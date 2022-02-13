@@ -11,8 +11,8 @@ namespace Viento.PuppetTheater.Node
     public class RandomOrderLoopNodeState : CompositeNodeState
     {
         public readonly IReadOnlyList<int> permutation;
-        private readonly int _index;
-        public override int index { get; }
+        private readonly int index;
+        public override int GetIndex() => index;
 
         public RandomOrderLoopNodeState(
             int size, 

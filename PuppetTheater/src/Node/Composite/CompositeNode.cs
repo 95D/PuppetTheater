@@ -33,6 +33,8 @@ namespace Viento.PuppetTheater.Node
                     return new AscentLoopNodeState(size, nodeId, ready);
                 case PermutateCategory.OrderedRandom:
                     return new RandomOrderLoopNodeState(size, nodeId, ready);
+                case PermutateCategory.InfiniteRandom:
+                    return new RandomPickLoopNodeState(size, nodeId, ready);
                 default:
                     throw new System.NotImplementedException(
                         string.Format("Couldn't find composite node state for [0]", permutateType));
@@ -45,19 +47,22 @@ namespace Viento.PuppetTheater.Node
             TraversalState traversalState,
             NodeState childNodeState)
         {
-            var currentNodeState = (traversalState.currentNodeState as CompositeNodeState).ToNextIndex();
+            var currentNodeState =
+                (traversalState.currentNodeState as CompositeNodeState).ToNextIndex();
             if (childNodeState.lifeCycle == category.breakState)
             {
-                return traversalState.UpdateCurrentNodeLifeCycle(category.breakState);
+                return traversalState.UpdateCurrentNode(
+                    currentNodeState.UpdateCurrentLifeCycle(category.breakState));
             }
             else if (currentNodeState.isIterationFinished())
             {
-                return traversalState.UpdateCurrentNodeLifeCycle(category.finallyState);
+                return traversalState.UpdateCurrentNode(
+                    currentNodeState.UpdateCurrentLifeCycle(category.finallyState));
             }
             else
             {
                 return traversalState.UpdateCurrentNode(currentNodeState).PushNode(
-                    children[currentNodeState.index].CreateNodeStateAsReady()
+                    children[currentNodeState.GetIndex()].CreateNodeStateAsReady()
                 );
             }
         }
@@ -71,16 +76,13 @@ namespace Viento.PuppetTheater.Node
             var currentNodeState = traversalState.currentNodeState as CompositeNodeState;
             return traversalState
                 .UpdateCurrentNodeLifeCycle(NodeLifeCycle.Running)
-                .PushNode(children[currentNodeState.index].CreateNodeStateAsReady());
+                .PushNode(children[currentNodeState.GetIndex()].CreateNodeStateAsReady());
         }
 
         protected override NodeLifeCycle ExecuteInternal(
             string puppetId,
             IPuppetController puppetController,
             TraversalState traversalState,
-            long currentMillis)
-        {
-            return NodeLifeCycle.Running;
-        }
+            long currentMillis) => NodeLifeCycle.Running;
     }
 }

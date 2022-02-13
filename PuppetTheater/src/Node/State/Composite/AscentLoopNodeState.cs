@@ -6,8 +6,9 @@ namespace Viento.PuppetTheater.Node
     public sealed class AscentLoopNodeState : CompositeNodeState
     {
         public readonly int size;
-        private readonly int _index;
-        public override int index { get; }
+        private readonly int index;
+        public override int GetIndex() => index;
+
         public AscentLoopNodeState(
             int size,
             string nodeId,
