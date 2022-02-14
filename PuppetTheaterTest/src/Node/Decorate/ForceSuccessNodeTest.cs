@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
 using Viento.PuppetTheater.Node;
@@ -7,7 +7,7 @@ using Viento.PuppetTheater.Puppet;
 namespace Viento.PuppetTheaterTest.Node
 {
     [TestClass]
-    public class InvertNodeTest
+    public class ForceSuccessNodeTest
     {
         private Mock<IPuppetController> mockPuppetController;
 
@@ -22,7 +22,7 @@ namespace Viento.PuppetTheaterTest.Node
         {
             var mockChild = new Mock<BehaviorNode>("child");
 
-            var dummyNode = new InvertNode(
+            var dummyNode = new ForceSuccessNode(
                 "test_node",
                 mockChild.Object);
 
@@ -32,14 +32,14 @@ namespace Viento.PuppetTheaterTest.Node
         }
 
         [TestMethod]
-        public void test_traverse_up_success()
+        public void test_traverse_up()
         {
             var mockChild = new Mock<BehaviorNode>("child");
             mockChild
                 .Setup(x => x.CreateNodeStateAsReady())
                 .Returns(new BasicNodeState("child", NodeLifeCycle.Ready));
 
-            var dummyNode = new InvertNode(
+            var dummyNode = new ForceSuccessNode(
                 "test_node",
                 mockChild.Object);
 
@@ -54,35 +54,7 @@ namespace Viento.PuppetTheaterTest.Node
                 traversalState, 
                 dummyChildState);
             
-            Assert.AreEqual("parent", nextTraversalState.currentNodeState.nodeId);
-            Assert.AreEqual(NodeLifeCycle.Failed, nextTraversalState.currentNodeState.lifeCycle);
-        }
-
-        [TestMethod]
-        public void test_traverse_up_failed()
-        {
-            var mockChild = new Mock<BehaviorNode>("child");
-            mockChild
-                .Setup(x => x.CreateNodeStateAsReady())
-                .Returns(new BasicNodeState("child", NodeLifeCycle.Ready));
-
-            var dummyNode = new InvertNode(
-                "test_node",
-                mockChild.Object);
-
-            var dummyParentState = new BasicNodeState("parent", NodeLifeCycle.Running);
-            var dummyChildState = new BasicNodeState("child", NodeLifeCycle.Failed);
-
-            var traversalState = new TraversalState(dummyParentState);
-
-            var nextTraversalState = dummyNode.TraverseUp(
-                "test_puppet", 
-                mockPuppetController.Object, 
-                traversalState, 
-                dummyChildState);
-            
-            Assert.AreEqual("parent", nextTraversalState.currentNodeState.nodeId);
-            Assert.AreEqual(NodeLifeCycle.Success, nextTraversalState.currentNodeState.lifeCycle);
+            Assert.AreEqual(traversalState, nextTraversalState);
         }
 
         [TestMethod]
@@ -93,17 +65,17 @@ namespace Viento.PuppetTheaterTest.Node
                 .Setup(x => x.CreateNodeStateAsReady())
                 .Returns(new BasicNodeState("child", NodeLifeCycle.Ready));
 
-            var dummyNode = new InvertNode(
+            var dummyNode = new ForceSuccessNode(
                 "test_node",
                 mockChild.Object);
 
             var mockParentStates = new Dictionary<string, Mock<NodeState>>
             {
                 ["parent"] = new Mock<NodeState>("parent", NodeLifeCycle.Ready),
-                ["next_parent"] = new Mock<NodeState>("parent", NodeLifeCycle.Running)
+                ["next_parent"] = new Mock<NodeState>("parent", NodeLifeCycle.Success)
             };
             mockParentStates["parent"]
-                .Setup(x => x.UpdateCurrentLifeCycle(NodeLifeCycle.Running))
+                .Setup(x => x.UpdateCurrentLifeCycle(NodeLifeCycle.Success))
                 .Returns(mockParentStates["next_parent"].Object);
 
             var traversalState = new TraversalState(mockParentStates["parent"].Object);
@@ -114,7 +86,7 @@ namespace Viento.PuppetTheaterTest.Node
                 traversalState, 
                 123456789);
 
-            mockParentStates["parent"].Verify(x => x.UpdateCurrentLifeCycle(NodeLifeCycle.Running));
+            mockParentStates["parent"].Verify(x => x.UpdateCurrentLifeCycle(NodeLifeCycle.Success));
             
             Assert.AreEqual("child", nextTraversalState.currentNodeState.nodeId);
             Assert.AreEqual(NodeLifeCycle.Ready, nextTraversalState.currentNodeState.lifeCycle);
@@ -126,7 +98,7 @@ namespace Viento.PuppetTheaterTest.Node
         {
             var mockChild = new Mock<BehaviorNode>("then_child");
 
-            var dummyNode = new InvertNode(
+            var dummyNode = new ForceSuccessNode(
                 "test_node",
                 mockChild.Object);
 

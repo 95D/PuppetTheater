@@ -1,64 +1,116 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Viento.PuppetTheater.Agent;
-using Viento.PuppetTheater.API;
-using Viento.PuppetTheater.Base;
+using System.Collections.Generic;
 using Viento.PuppetTheater.Node;
+using Viento.PuppetTheater.Puppet;
 
 namespace Viento.PuppetTheaterTest.Node
 {
     [TestClass]
     public class ForceFailureNodeTest
     {
-        private Mock<BlackBoard> blackBoard;
-        private Mock<AgentChannel> agentChannel;
-        private Mock<BehaviorContext> bContext;
-        private Mock<IBehaviorNode> successNode;
-        private Mock<IBehaviorNode> failureNode;
+        private Mock<IPuppetController> mockPuppetController;
 
         [TestInitialize]
         public void TestUp()
         {
-            blackBoard = new Mock<BlackBoard>();
-            agentChannel = new Mock<AgentChannel>();
-            bContext = new Mock<BehaviorContext>(
-                blackBoard.Object,
-                agentChannel.Object,
-                "testBehaviorContext",
-                /* isTimeLimit */ false, /* timeout */ 0,
-                /* isHopLimit */ false, /* hopout */ 0
-            );
-            successNode = new Mock<IBehaviorNode>();
-            failureNode = new Mock<IBehaviorNode>();
-
-            successNode.Setup(x => x.GetHashCode()).Returns("SuccessNode".GetHashCode());
-            successNode.Setup(x => x.Execute(bContext.Object)).Returns(true);
-            failureNode.Setup(x => x.GetHashCode()).Returns("FailureNode".GetHashCode());
-            failureNode.Setup(x => x.Execute(bContext.Object)).Returns(false);
+            mockPuppetController = new Mock<IPuppetController>();
         }
 
         [TestMethod]
-        public void test_success()
+        public void test_create_node_state_as_ready_ascending()
         {
-            var testNode = new ForceFailureNode(
-                "testNode",
-                successNode.Object);
+            var mockChild = new Mock<BehaviorNode>("child");
 
-            Assert.AreEqual(false, testNode.Execute(bContext.Object));
+            var dummyNode = new ForceFailureNode(
+                "test_node",
+                mockChild.Object);
 
-            successNode.Verify(x => x.Execute(bContext.Object));
+            var state = dummyNode.CreateNodeStateAsReady();
+            Assert.AreEqual("test_node", state.nodeId);
+            Assert.AreEqual(NodeLifeCycle.Ready, state.lifeCycle);
         }
 
         [TestMethod]
-        public void test_failure()
+        public void test_traverse_up()
         {
-            var testNode = new ForceFailureNode(
-                "testNode",
-                failureNode.Object);
+            var mockChild = new Mock<BehaviorNode>("child");
+            mockChild
+                .Setup(x => x.CreateNodeStateAsReady())
+                .Returns(new BasicNodeState("child", NodeLifeCycle.Ready));
 
-            Assert.AreEqual(false, testNode.Execute(bContext.Object));
+            var dummyNode = new ForceFailureNode(
+                "test_node",
+                mockChild.Object);
 
-            failureNode.Verify(x => x.Execute(bContext.Object));
+            var dummyParentState = new BasicNodeState("parent", NodeLifeCycle.Running);
+            var dummyChildState = new BasicNodeState("child", NodeLifeCycle.Success);
+
+            var traversalState = new TraversalState(dummyParentState);
+
+            var nextTraversalState = dummyNode.TraverseUp(
+                "test_puppet", 
+                mockPuppetController.Object, 
+                traversalState, 
+                dummyChildState);
+            
+            Assert.AreEqual(traversalState, nextTraversalState);
+        }
+
+        [TestMethod]
+        public void test_traverse_down()
+        {
+            var mockChild = new Mock<BehaviorNode>("child");
+            mockChild
+                .Setup(x => x.CreateNodeStateAsReady())
+                .Returns(new BasicNodeState("child", NodeLifeCycle.Ready));
+
+            var dummyNode = new ForceFailureNode(
+                "test_node",
+                mockChild.Object);
+
+            var mockParentStates = new Dictionary<string, Mock<NodeState>>
+            {
+                ["parent"] = new Mock<NodeState>("parent", NodeLifeCycle.Ready),
+                ["next_parent"] = new Mock<NodeState>("parent", NodeLifeCycle.Failed)
+            };
+            mockParentStates["parent"]
+                .Setup(x => x.UpdateCurrentLifeCycle(NodeLifeCycle.Failed))
+                .Returns(mockParentStates["next_parent"].Object);
+
+            var traversalState = new TraversalState(mockParentStates["parent"].Object);
+
+            var nextTraversalState = dummyNode.TraverseDown(
+                "test_puppet", 
+                mockPuppetController.Object, 
+                traversalState, 
+                123456789);
+
+            mockParentStates["parent"].Verify(x => x.UpdateCurrentLifeCycle(NodeLifeCycle.Failed));
+            
+            Assert.AreEqual("child", nextTraversalState.currentNodeState.nodeId);
+            Assert.AreEqual(NodeLifeCycle.Ready, nextTraversalState.currentNodeState.lifeCycle);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(System.NotImplementedException))]
+        public void test_execute()
+        {
+            var mockChild = new Mock<BehaviorNode>("then_child");
+
+            var dummyNode = new ForceFailureNode(
+                "test_node",
+                mockChild.Object);
+
+            var dummyParentState = new BasicNodeState("parent", NodeLifeCycle.Ready);
+
+            var traversalState = new TraversalState(dummyParentState);
+
+            dummyNode.Execute(
+                "test_puppet",
+                mockPuppetController.Object,
+                traversalState,
+                123456789);
         }
     }
 }
