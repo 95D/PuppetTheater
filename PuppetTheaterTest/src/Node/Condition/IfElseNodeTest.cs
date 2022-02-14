@@ -17,7 +17,7 @@ namespace Viento.PuppetTheaterTest.Node.Condition
         }
 
         [TestMethod]
-        public void test_create_node_state_as_ready_ascending()
+        public void test_create_node_state_as_ready()
         {
             var mockThenChild = new Mock<BehaviorNode>("then_child");
             var mockElseChild = new Mock<BehaviorNode>("else_child");

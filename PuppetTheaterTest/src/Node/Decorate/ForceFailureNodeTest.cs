@@ -18,7 +18,7 @@ namespace Viento.PuppetTheaterTest.Node
         }
 
         [TestMethod]
-        public void test_create_node_state_as_ready_ascending()
+        public void test_create_node_state_as_ready()
         {
             var mockChild = new Mock<BehaviorNode>("child");
 
