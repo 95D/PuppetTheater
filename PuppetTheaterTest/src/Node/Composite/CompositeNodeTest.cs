@@ -75,7 +75,7 @@ namespace Viento.PuppetTheaterTest.Node
         }
 
         [TestMethod]
-        public void test_traversal_up_break()
+        public void test_traverse_up_break()
         {
             var testCategory = new CompositeCategory(
                 breakState: NodeLifeCycle.Success,
@@ -117,7 +117,7 @@ namespace Viento.PuppetTheaterTest.Node
         }
 
         [TestMethod]
-        public void test_traversal_up_finally()
+        public void test_traverse_up_finally()
         {
             var testCategory = new CompositeCategory(
                 breakState: NodeLifeCycle.Success,
@@ -163,7 +163,7 @@ namespace Viento.PuppetTheaterTest.Node
         }
 
         [TestMethod]
-        public void test_traversal_up_next()
+        public void test_traverse_up_next()
         {
             var testCategory = new CompositeCategory(
                 breakState: NodeLifeCycle.Success,
@@ -216,7 +216,7 @@ namespace Viento.PuppetTheaterTest.Node
         }
 
         [TestMethod]
-        public void test_traversal_down()
+        public void test_traverse_down()
         {
             var testCategory = new CompositeCategory(
                 breakState: NodeLifeCycle.Success,
