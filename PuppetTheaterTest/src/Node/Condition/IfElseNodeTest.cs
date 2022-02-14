@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Viento.PuppetTheater.Agent;
-using Viento.PuppetTheater.API;
-using Viento.PuppetTheater.Base;
+using Viento.PuppetTheater.Puppet;
 using Viento.PuppetTheater.Node;
 
 namespace Viento.PuppetTheaterTest.Node.Condition
@@ -10,61 +8,178 @@ namespace Viento.PuppetTheaterTest.Node.Condition
     [TestClass]
     public class IfElseNodeTest
     {
-        private Mock<BlackBoard> blackBoard;
-        private Mock<AgentChannel> agentChannel;
-        private Mock<BehaviorContext> bContext;
-        private Mock<IBehaviorNode> thenNode;
-        private Mock<IBehaviorNode> elseNode;
+        private Mock<IPuppetController> mockPuppetController;
 
         [TestInitialize]
         public void TestUp()
         {
-            blackBoard = new Mock<BlackBoard>();
-            agentChannel = new Mock<AgentChannel>();
-            bContext = new Mock<BehaviorContext>(
-                blackBoard.Object,
-                agentChannel.Object,
-                "testBehaviorContext",
-                /* isTimeLimit */ false, /* timeout */ 0,
-                /* isHopLimit */ false, /* hopout */ 0
-            );
-            thenNode = new Mock<IBehaviorNode>();
-            elseNode = new Mock<IBehaviorNode>();
-
-            thenNode.Setup(x => x.GetHashCode()).Returns("thenNode".GetHashCode());
-            //thenNode.Setup(x => x.Execute(bContext.Object)).Returns(true);
-            elseNode.Setup(x => x.GetHashCode()).Returns("elseNode".GetHashCode());
-            //elseNode.Setup(x => x.Execute(bContext.Object)).Returns(true);
+            mockPuppetController = new Mock<IPuppetController>();
         }
 
         [TestMethod]
-        public void test_if_then()
+        public void test_create_node_state_as_ready_ascending()
         {
-            var testNode = new IfElseNode(
-                "testNode",
-                new OnCheckCondition(context => { return true; }),
-                thenNode.Object,
-                elseNode.Object
-                );
-            testNode.Execute(bContext.Object);
+            var mockThenChild = new Mock<BehaviorNode>("then_child");
+            var mockElseChild = new Mock<BehaviorNode>("else_child");
 
-            thenNode.Verify(x => x.Execute(bContext.Object));
-            elseNode.Verify(x => x.Execute(bContext.Object), Times.Never);
+            var dummyNode = new IfElseNode(
+                "test_node",
+                "test_assertion",
+                mockThenChild.Object,
+                mockElseChild.Object);
+
+            var state = dummyNode.CreateNodeStateAsReady();
+            Assert.AreEqual("test_node", state.nodeId);
+            Assert.AreEqual(NodeLifeCycle.Ready, state.lifeCycle);
         }
 
         [TestMethod]
-        public void test_if_else()
+        public void test_traverse_up_success()
         {
-            var testNode = new IfElseNode(
-                "testNode",
-                new OnCheckCondition(context => { return false; }),
-                thenNode.Object,
-                elseNode.Object
-                );
-            testNode.Execute(bContext.Object);
+            var mockThenChild = new Mock<BehaviorNode>("then_child");
+            var mockElseChild = new Mock<BehaviorNode>("else_child");
 
-            thenNode.Verify(x => x.Execute(bContext.Object), Times.Never);
-            elseNode.Verify(x => x.Execute(bContext.Object));
+            var dummyNode = new IfElseNode(
+                "test_node",
+                "test_assertion",
+                mockThenChild.Object,
+                mockElseChild.Object);
+
+            var dummyParentState = new BasicNodeState("parent", NodeLifeCycle.Running);
+            var dummyChildState = new BasicNodeState("child", NodeLifeCycle.Success);
+
+            var traversalState = new TraversalState(dummyParentState);
+
+            var nextTraversalState = dummyNode.TraverseUp(
+                "test_puppet",
+                mockPuppetController.Object,
+                traversalState,
+                dummyChildState);
+
+            Assert.AreEqual("parent", nextTraversalState.currentNodeState.nodeId);
+            Assert.AreEqual(NodeLifeCycle.Success, nextTraversalState.currentNodeState.lifeCycle);
+        }
+
+        [TestMethod]
+        public void test_traverse_up_failed()
+        {
+            var mockThenChild = new Mock<BehaviorNode>("then_child");
+            var mockElseChild = new Mock<BehaviorNode>("else_child");
+
+            var dummyNode = new IfElseNode(
+                "test_node",
+                "test_assertion",
+                mockThenChild.Object,
+                mockElseChild.Object);
+
+            var dummyParentState = new BasicNodeState("parent", NodeLifeCycle.Running);
+            var dummyChildState = new BasicNodeState("child", NodeLifeCycle.Failed);
+
+            var traversalState = new TraversalState(dummyParentState);
+
+            var nextTraversalState = dummyNode.TraverseUp(
+                "test_puppet",
+                mockPuppetController.Object,
+                traversalState,
+                dummyChildState);
+
+            Assert.AreEqual("parent", nextTraversalState.currentNodeState.nodeId);
+            Assert.AreEqual(NodeLifeCycle.Failed, nextTraversalState.currentNodeState.lifeCycle);
+        }
+
+        [TestMethod]
+        public void test_traverse_down_then()
+        {
+            mockPuppetController
+                .Setup(x => x.Assert("test_puppet", "test_assertion"))
+                .Returns(true);
+
+            var mockThenChild = new Mock<BehaviorNode>("then_child");
+            mockThenChild
+                .Setup(x => x.CreateNodeStateAsReady())
+                .Returns(new BasicNodeState("then_child", NodeLifeCycle.Ready));
+
+            var mockElseChild = new Mock<BehaviorNode>("else_child");
+
+            var dummyNode = new IfElseNode(
+                "test_node",
+                "test_assertion",
+                mockThenChild.Object,
+                mockElseChild.Object);
+
+            var dummyParentState = new BasicNodeState("parent", NodeLifeCycle.Ready);
+
+            var traversalState = new TraversalState(dummyParentState);
+
+            var nextTraversalState = dummyNode.TraverseDown(
+                "test_puppet",
+                mockPuppetController.Object,
+                traversalState,
+                123456789);
+
+            mockThenChild.Verify(x => x.CreateNodeStateAsReady());
+
+            Assert.AreEqual("then_child", nextTraversalState.currentNodeState.nodeId);
+            Assert.AreEqual(NodeLifeCycle.Ready, nextTraversalState.currentNodeState.lifeCycle);
+        }
+
+        [TestMethod]
+        public void test_traverse_down_else()
+        {
+            mockPuppetController
+                .Setup(x => x.Assert("test_puppet", "test_assertion"))
+                .Returns(false);
+
+            var mockThenChild = new Mock<BehaviorNode>("then_child");
+            var mockElseChild = new Mock<BehaviorNode>("else_child");
+            mockElseChild
+                .Setup(x => x.CreateNodeStateAsReady())
+                .Returns(new BasicNodeState("else_child", NodeLifeCycle.Ready));
+
+            var dummyNode = new IfElseNode(
+                "test_node",
+                "test_assertion",
+                mockThenChild.Object,
+                mockElseChild.Object);
+
+            var dummyParentState = new BasicNodeState("parent", NodeLifeCycle.Ready);
+
+            var traversalState = new TraversalState(dummyParentState);
+
+            var nextTraversalState = dummyNode.TraverseDown(
+                "test_puppet",
+                mockPuppetController.Object,
+                traversalState,
+                123456789);
+
+            mockElseChild.Verify(x => x.CreateNodeStateAsReady());
+
+            Assert.AreEqual("else_child", nextTraversalState.currentNodeState.nodeId);
+            Assert.AreEqual(NodeLifeCycle.Ready, nextTraversalState.currentNodeState.lifeCycle);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(System.NotImplementedException))]
+        public void test_execute()
+        {
+            var mockThenChild = new Mock<BehaviorNode>("then_child");
+            var mockElseChild = new Mock<BehaviorNode>("else_child");
+
+            var dummyNode = new IfElseNode(
+                "test_node",
+                "test_assertion",
+                mockThenChild.Object,
+                mockElseChild.Object);
+
+            var dummyParentState = new BasicNodeState("parent", NodeLifeCycle.Ready);
+
+            var traversalState = new TraversalState(dummyParentState);
+
+            dummyNode.Execute(
+                "test_puppet",
+                mockPuppetController.Object,
+                traversalState,
+                123456789);
         }
     }
 }
