@@ -48,7 +48,7 @@ namespace Viento.PuppetTheater.Serialization
             IReadOnlyDictionary<string, INodeEntity> entityMap) => new UntilNode(
                 nodeId: entity.nodeId,
                 assertionId: entity.assertionId,
-                thenChild: entity.thenChild.AccountBehaviorNode(tree, entityMap));
+                untilChild: entity.thenChild.AccountBehaviorNode(tree, entityMap));
 
         private static CompositeNode ToCompositeNode(
             this CompositeEntity entity,

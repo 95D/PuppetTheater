@@ -12,10 +12,10 @@ namespace Viento.PuppetTheater.Node
         public UntilNode(
             string nodeId,
             string assertionId,
-            BehaviorNode thenChild
+            BehaviorNode untilChild
             ) : base(nodeId, assertionId)
         {
-            this.untilChild = thenChild;
+            this.untilChild = untilChild;
         }
 
         public override TraversalState TraverseDown(
