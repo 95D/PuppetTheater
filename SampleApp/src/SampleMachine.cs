@@ -10,13 +10,11 @@ public class SampleMachine
     public bool Assert(string assertionId, SampleState state)
     {
         Console.WriteLine(String.Format("checks {0}", assertionId));
-        switch (assertionId)
+        return assertionId switch
         {
-            case TAG_COULD_BUY_ITEM:
-                return AssertCouldByItem(state);
-            default:
-                throw new ArgumentException("Invalid assertion id");
-        }
+            TAG_COULD_BUY_ITEM => AssertCouldByItem(state),
+            _ => throw new ArgumentException("Invalid assertion id")
+        };
     }
 
     private bool AssertCouldByItem(SampleState state) =>
