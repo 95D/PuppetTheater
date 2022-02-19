@@ -8,8 +8,7 @@ namespace Viento.PuppetTheater.Node
     /// </summary>
     public sealed class CancelNode : LeafNode
     {
-        public const string TERMINATE = "!!!CANCEL!!!";
-        public CancelNode() : base(TERMINATE)
+        public CancelNode(string nodeId) : base(nodeId)
         {
         }
 
