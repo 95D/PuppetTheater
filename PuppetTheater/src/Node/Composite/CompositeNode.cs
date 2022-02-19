@@ -27,18 +27,15 @@ namespace Viento.PuppetTheater.Node
         {
             int size = children.Count;
             NodeLifeCycle ready = NodeLifeCycle.Ready;
-            switch (permutateType)
-            {
-                case PermutateCategory.Ascending:
-                    return new AscentLoopNodeState(size, nodeId, ready);
-                case PermutateCategory.OrderedRandom:
-                    return new RandomOrderLoopNodeState(size, nodeId, ready);
-                case PermutateCategory.InfiniteRandom:
-                    return new RandomPickLoopNodeState(size, nodeId, ready);
-                default:
-                    throw new System.NotImplementedException(
-                        string.Format("Couldn't find composite node state for [0]", permutateType));
-            }
+            return permutateType switch {
+                PermutateCategory.Ascending => new AscentLoopNodeState(size, nodeId, ready),
+                PermutateCategory.OrderedRandom => 
+                    new RandomOrderLoopNodeState(size, nodeId, ready),
+                PermutateCategory.InfiniteRandom =>
+                    new RandomPickLoopNodeState(size, nodeId, ready),
+                _ => throw new System.NotImplementedException(
+                        string.Format("Couldn't find composite node state for [0]", permutateType))
+            };
         }
 
         public override TraversalState TraverseUp(

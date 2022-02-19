@@ -1,44 +1,36 @@
-namespace Viento.PuppetTheater.Serialization {
+namespace Viento.PuppetTheater.Serialization
+{
     /// <summary>
     /// A Creator for creating [INodeEntity] according to key [nodeType]
     /// </summary>
-    public class NodeEntityCreator {
-        public INodeEntity Create(string nodeType) {
-            switch(nodeType) {
-                // Leaf
-                case ActionEntity.TYPE:
-                    return new ActionEntity();
+    public class NodeEntityCreator
+    {
+        public INodeEntity Create(string nodeType) => nodeType switch
+        {
+            // Leaf
+            ActionEntity.TYPE => new ActionEntity(),
 
-                // Composite
-                case CompositeEntity.TYPE:
-                    return new CompositeEntity();
-                
-                // Condition
-                case IfEntity.TYPE:
-                    return new IfEntity();
-                case IfElseEntity.TYPE:
-                    return new IfElseEntity();
-                case UntilEntity.TYPE:
-                    return new UntilEntity();
-                
-                // Decorate
-                case ForceFailureEntity.TYPE:
-                    return new ForceFailureEntity();
-                case ForceSuccessEntity.TYPE:
-                    return new ForceSuccessEntity();
-                case InvertEntity.TYPE:
-                    return new InvertEntity();
-                case RepeatEntity.TYPE:
-                    return new RepeatEntity();
-                case StochasticEntity.TYPE:
-                    return new StochasticEntity();
+            // Composite
+            CompositeEntity.TYPE => new CompositeEntity(),
 
-                // Etc 
-                case SubTreeEntity.TYPE:
-                    return new SubTreeEntity();
-            }
-            throw new System.ApplicationException(
-                string.Format("The given vehicle type {0} is not supported!", nodeType));
-        }
+            // Condition
+            IfEntity.TYPE => new IfEntity(),
+            IfElseEntity.TYPE => new IfElseEntity(),
+            UntilEntity.TYPE => new UntilEntity(),
+
+            // Decorate
+            ForceFailureEntity.TYPE => new ForceFailureEntity(),
+            ForceSuccessEntity.TYPE => new ForceSuccessEntity(),
+            InvertEntity.TYPE => new InvertEntity(),
+            RepeatEntity.TYPE => new RepeatEntity(),
+            StochasticEntity.TYPE => new StochasticEntity(),
+
+            // Etc 
+            SubTreeEntity.TYPE => new SubTreeEntity(),
+            _ => throw new System.ApplicationException(
+                string.Format(
+                    "The given vehicle type {0} is not supported!",
+                    nodeType))
+        };
     }
 }

@@ -16,20 +16,14 @@ namespace Viento.PuppetTheater.Node
     /// </summary>
     public static class ActionLifeCycleExtensions
     {
-        public static NodeLifeCycle toNodeLifeCycle(this ActionLifeCycle lifeCycle)
-        {
-            switch (lifeCycle)
+        public static NodeLifeCycle toNodeLifeCycle(this ActionLifeCycle lifeCycle) =>
+            lifeCycle switch
             {
-                case ActionLifeCycle.Start:
-                    return NodeLifeCycle.Start;
-                case ActionLifeCycle.Running:
-                    return NodeLifeCycle.Running;
-                case ActionLifeCycle.Success:
-                    return NodeLifeCycle.Success;
-                case ActionLifeCycle.Failed:
-                    return NodeLifeCycle.Failed;
-            }
-            throw new System.InvalidOperationException("Invalid action type!");
-        }
+                ActionLifeCycle.Start => NodeLifeCycle.Start,
+                ActionLifeCycle.Running => NodeLifeCycle.Running,
+                ActionLifeCycle.Success => NodeLifeCycle.Success,
+                ActionLifeCycle.Failed => NodeLifeCycle.Failed,
+                _ => throw new System.InvalidOperationException("Invalid action type!")
+            };
     }
 }

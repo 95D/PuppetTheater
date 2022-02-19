@@ -27,17 +27,12 @@ namespace Viento.PuppetTheater.Node
 
         private const string KEY_SELECT = "select";
         private const string KEY_SEQUENCE = "sequence";
-        public static CompositeCategory From(string key)
-        {
-            switch (key)
-            {
-                case KEY_SELECT:
-                    return select;
-                case KEY_SEQUENCE:
-                    return sequence;
-            }
-            throw new System.ApplicationException(
-                string.Format("The given key for category {0} is not supported!", key));
-        }
+        public static CompositeCategory From(string key) =>
+            key switch {
+                KEY_SELECT => select,
+                KEY_SEQUENCE => sequence,
+                _ => throw new System.ApplicationException(
+                string.Format("The given key for category {0} is not supported!", key))
+            };
     }
 }
