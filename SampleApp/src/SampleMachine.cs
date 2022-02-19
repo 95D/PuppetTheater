@@ -37,7 +37,7 @@ public class SampleMachine
             default:
                 break;
         }
-        return ActionLifeCycle.Start;
+        return ActionLifeCycle.Running;
     }
 
     private void StartActSitUp(SampleState state)
