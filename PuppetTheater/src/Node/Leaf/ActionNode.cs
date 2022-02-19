@@ -30,7 +30,8 @@ namespace Viento.PuppetTheater.Node
             long currentMillis)
         {
             var resultLifeCycle = puppetController.RequestAction(puppetId, actionId);
-            var nextNodeState = (traversalState.currentNodeState as TimeoutNodeState).Start(currentMillis);
+            var nextNodeState = (traversalState.currentNodeState as TimeoutNodeState)
+                .Start(currentMillis, resultLifeCycle.toNodeLifeCycle());
             return traversalState.UpdateCurrentNode(nextNodeState);
         }
 

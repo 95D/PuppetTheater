@@ -11,8 +11,22 @@ namespace Viento.PuppetTheater.Node
         private readonly NodeState topNode;
         private readonly ImmutableList<NodeState> nodeStack;
 
-        public NodeState currentNodeState { 
-            get {
+        public bool isEnqueuedNewCommand
+        {
+            get => currentNodeState is TimeoutNodeState timeoutNodeState &&
+                    timeoutNodeState.isStarting;
+        }
+
+        public bool isRunningCommand
+        {
+            get => currentNodeState is TimeoutNodeState && 
+                currentNodeState.lifeCycle.isFinished();
+        }
+
+        public NodeState currentNodeState
+        {
+            get
+            {
                 return nodeStack.Last();
             }
         }
@@ -45,11 +59,15 @@ namespace Viento.PuppetTheater.Node
                 topNode,
                 nodeStack.Replace(currentNodeState, next));
 
-        public TraversalState PopNode() {
+        public TraversalState PopNode()
+        {
             var nextNodeStack = nodeStack.Remove(currentNodeState);
-            if(nextNodeStack.IsEmpty) {
+            if (nextNodeStack.IsEmpty)
+            {
                 return Reset();
-            } else {
+            }
+            else
+            {
                 return new TraversalState(
                     topNode,
                     nextNodeStack);
@@ -64,9 +82,9 @@ namespace Viento.PuppetTheater.Node
             separator: " => ",
             values: nodeStack.Select(x =>
                 string.Format(
-                    "[{0}|{1}, <{2}>]", 
-                    x.nodeId, 
-                    x.GetType().Name, 
+                    "[{0}|{1}, <{2}>]",
+                    x.nodeId,
+                    x.GetType().Name,
                     x.lifeCycle.ToString())));
     }
 }

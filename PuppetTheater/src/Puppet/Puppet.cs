@@ -27,16 +27,10 @@ namespace Viento.PuppetTheater.Puppet
             long currentMillis)
         {
             traversalState = TraverseOneTick(puppetController, currentMillis);
-
-            switch (traversalState.currentNodeState.lifeCycle)
-            {
-                case NodeLifeCycle.Start:
-                    return RequestActionResult.NewAction;
-                case NodeLifeCycle.Running:
-                    return RequestActionResult.RunningAction;
-                default:
-                    return RequestActionResult.Thinking;
-            }
+            
+            if(traversalState.isEnqueuedNewCommand) return RequestActionResult.NewAction;
+            if(traversalState.isRunningCommand) return RequestActionResult.RunningAction;
+            return RequestActionResult.Thinking;
         }
 
         private TraversalState TraverseOneTick(
