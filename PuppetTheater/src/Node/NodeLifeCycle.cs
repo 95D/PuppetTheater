@@ -1,7 +1,6 @@
 namespace Viento.PuppetTheater.Node {
     public enum NodeLifeCycle {
         Ready,
-        Start,
         Running,
         Success,
         Failed

@@ -5,7 +5,6 @@ namespace Viento.PuppetTheater.Node
     /// </summary>
     public enum ActionLifeCycle
     {
-        Start,
         Running,
         Success,
         Failed
@@ -19,7 +18,6 @@ namespace Viento.PuppetTheater.Node
         public static NodeLifeCycle toNodeLifeCycle(this ActionLifeCycle lifeCycle) =>
             lifeCycle switch
             {
-                ActionLifeCycle.Start => NodeLifeCycle.Start,
                 ActionLifeCycle.Running => NodeLifeCycle.Running,
                 ActionLifeCycle.Success => NodeLifeCycle.Success,
                 ActionLifeCycle.Failed => NodeLifeCycle.Failed,
