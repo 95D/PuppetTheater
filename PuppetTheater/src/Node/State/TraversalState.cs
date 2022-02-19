@@ -20,7 +20,7 @@ namespace Viento.PuppetTheater.Node
         public bool isRunningCommand
         {
             get => currentNodeState is TimeoutNodeState && 
-                currentNodeState.lifeCycle.isFinished();
+                currentNodeState.lifeCycle.IsFinished();
         }
 
         public NodeState currentNodeState

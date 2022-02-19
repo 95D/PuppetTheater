@@ -15,7 +15,7 @@ namespace Viento.PuppetTheater.Node
     /// </summary>
     public static class ActionLifeCycleExtensions
     {
-        public static NodeLifeCycle toNodeLifeCycle(this ActionLifeCycle lifeCycle) =>
+        public static NodeLifeCycle ToNodeLifeCycle(this ActionLifeCycle lifeCycle) =>
             lifeCycle switch
             {
                 ActionLifeCycle.Running => NodeLifeCycle.Running,

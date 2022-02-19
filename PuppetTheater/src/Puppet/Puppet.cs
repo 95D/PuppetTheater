@@ -47,7 +47,7 @@ namespace Viento.PuppetTheater.Puppet
                     currentMillis);
 
             }
-            else if (currentNodeState.lifeCycle.isFinished())
+            else if (currentNodeState.lifeCycle.IsFinished())
             {
                 var childNodeState = traversalState.currentNodeState;
                 var parentTraversalState = traversalState.PopNode();

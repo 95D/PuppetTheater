@@ -7,10 +7,10 @@ namespace Viento.PuppetTheater.Node {
     }
 
     public static class NodeLifeCycleExtensions {
-        public static bool isFinished(this NodeLifeCycle lifeCycle) =>
+        public static bool IsFinished(this NodeLifeCycle lifeCycle) =>
             lifeCycle > NodeLifeCycle.Running;
 
-        public static bool isSucceeded(this NodeLifeCycle lifeCycle) =>
+        public static bool IsSucceeded(this NodeLifeCycle lifeCycle) =>
             lifeCycle == NodeLifeCycle.Success;
     }
 }

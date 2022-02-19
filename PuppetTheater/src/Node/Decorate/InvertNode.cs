@@ -27,7 +27,7 @@ namespace Viento.PuppetTheater.Node
             TraversalState traversalState,
             NodeState childNodeState)
         {
-            if (childNodeState.lifeCycle.isSucceeded())
+            if (childNodeState.lifeCycle.IsSucceeded())
             {
                 return traversalState.UpdateCurrentNodeLifeCycle(NodeLifeCycle.Failed);
             }

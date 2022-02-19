@@ -31,7 +31,7 @@ namespace Viento.PuppetTheater.Node
         {
             var resultLifeCycle = puppetController.RequestAction(puppetId, actionId);
             var nextNodeState = (traversalState.currentNodeState as TimeoutNodeState)
-                .Start(currentMillis, resultLifeCycle.toNodeLifeCycle());
+                .Start(currentMillis, resultLifeCycle.ToNodeLifeCycle());
             return traversalState.UpdateCurrentNode(nextNodeState);
         }
 
@@ -49,7 +49,7 @@ namespace Viento.PuppetTheater.Node
                 return NodeLifeCycle.Success;
             }
             else
-                return puppetController.GetCurrentActionState(puppetId, actionId).toNodeLifeCycle();
+                return puppetController.GetCurrentActionState(puppetId, actionId).ToNodeLifeCycle();
         }
     }
 }
