@@ -7,8 +7,7 @@ namespace Viento.PuppetTheater.Node
     /// </summary>
     public sealed class TerminateNode : LeafNode
     {
-        public const string TERMINATE = "!!!TERMINATE!!!";
-        public TerminateNode() : base(TERMINATE)
+        public TerminateNode(string nodeId) : base(nodeId)
         {
         }
 
