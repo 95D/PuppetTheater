@@ -139,7 +139,7 @@ namespace Viento.PuppetTheaterTest.Node
                 123456789);
 
             Assert.AreEqual("parent", nextTraversalState.currentNodeState.nodeId);
-            Assert.AreEqual(NodeLifeCycle.Running, nextTraversalState.currentNodeState.lifeCycle);
+            Assert.AreEqual(NodeLifeCycle.Failed, nextTraversalState.currentNodeState.lifeCycle);
         }
 
         [TestMethod]
